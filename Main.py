@@ -37,6 +37,9 @@ class TicTacToe(GridLayout):
             self.buttons.append(row)
         self.character = self.X   # Turn Player
         self.winner = None
+    
+    
+    
 
     def on_button_press(self, instance):    # if tuch button
         if instance.text == '':
@@ -78,10 +81,22 @@ class TicTacToeApp(App):
         
         turn = Label(font_size=40, pos_hint={'center_x': 0.5, 'center_y': 0.3})
         mapp.turn_label = turn
+
+        
+        sett = BoxLayout(size_hint=(None, None), size=(500, 100), pos_hint={'center_x': 0.5, 'center_y': 0.1})
+        
+        S = Button(text="S", on_press=lambda instance: mapp.changepoint("S"))
+        M = Button(text="M", on_press=lambda instance: mapp.changepoint("M"))
+        L = Button(text="L", on_press=lambda instance: mapp.changepoint("L"))
+        sett.add_widget(S)
+        sett.add_widget(M)
+        sett.add_widget(L)
         
         game.add_widget(title)  # Game name
         game.add_widget(mapp)   # Game
         game.add_widget(turn)   # Your Turn
+        game.add_widget(sett)   # chang size
+
         
         # return TicTacToe()
         return game
