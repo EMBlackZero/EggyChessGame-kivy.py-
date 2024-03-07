@@ -5,7 +5,9 @@ from kivy.uix.popup import Popup
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.relativelayout import RelativeLayout
+from kivy.clock import Clock
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image, AsyncImage
 
 class Item(Label):
     def __init__(self, namee, **kwargs):
@@ -24,6 +26,8 @@ class TicTacToe(GridLayout):
         self.buttons = []
         self.X = Item("x")
         self.O = Item("O")
+        self.turn_label = None
+        Clock.schedule_interval(self.update_turn_label, 0.1)
         for _ in range(3):
             row = []
             for _ in range(3):
@@ -34,7 +38,7 @@ class TicTacToe(GridLayout):
         self.character = self.X   # Turn Player
         self.winner = None
 
-    def on_button_press(self, instance):
+    def on_button_press(self, instance):    # if tuch button
         if instance.text == '':
             instance.text = self.character.name
             if self.check_winner():
@@ -42,7 +46,7 @@ class TicTacToe(GridLayout):
             else:
                 self.character = self.O if self.character == self.X else self.X
 
-    def check_winner(self):
+    def check_winner(self): # Check winner
         for i in range(3):
             # Check rows
             if self.buttons[i][0].text == self.buttons[i][1].text == self.buttons[i][2].text != '':
@@ -61,11 +65,26 @@ class TicTacToe(GridLayout):
         popup = Popup(title='Game Over', content=BoxLayout(orientation='vertical'), size_hint=(None, None), size=(400, 200))
         popup.content.add_widget(Button(text=text, size_hint=(None, None), size=(200, 50), pos_hint={'center_x': 0.5, 'center_y': 0.5}, on_press=popup.dismiss))
         popup.open()
-
+        
+    def update_turn_label(self, dt):    #Update Yourturn
+        if self.turn_label:
+            self.turn_label.text = f"Is turn : {self.character.name}"
 
 class TicTacToeApp(App):
     def build(self):
-        return TicTacToe()
+        game = FloatLayout()
+        title = Label(text="Tic tac toc", font_size=40, pos_hint={'center_x': 0.5, 'center_y': 0.9})
+        mapp = TicTacToe(size_hint=(None, None), size=(500, 500), pos_hint={'center_x': 0.5, 'center_y': 0.6})
+        
+        turn = Label(font_size=40, pos_hint={'center_x': 0.5, 'center_y': 0.3})
+        mapp.turn_label = turn
+        
+        game.add_widget(title)  # Game name
+        game.add_widget(mapp)   # Game
+        game.add_widget(turn)   # Your Turn
+        
+        # return TicTacToe()
+        return game
 
 if __name__ == '__main__':
     TicTacToeApp().run()
