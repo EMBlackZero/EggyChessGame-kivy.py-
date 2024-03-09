@@ -39,7 +39,15 @@ class TicTacToe(GridLayout):
         self.winner = None
     
     
-    
+    def changepoint(self, button):
+        #self.X.point = 2
+        if button == "S":
+            self.character.point = 1
+        elif button == "M" and self.character.m > 0:
+            self.character.point = 2
+        else:
+            self.character.point = 3
+        print(self.character.point)
 
     def on_button_press(self, instance):    # if tuch button
         if instance.text == '':
