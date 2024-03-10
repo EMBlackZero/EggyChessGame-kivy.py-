@@ -9,6 +9,7 @@ from kivy.clock import Clock
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image, AsyncImage
 
+# Class Character
 class Item(Label):
     def __init__(self, namee, **kwargs):
         super().__init__(**kwargs)
@@ -18,7 +19,17 @@ class Item(Label):
         self.s = 3 ; self.m = 3 ; self.l = 2  # Quantity of each size
         self.allsize = {'S':self.s,'M':self.m,'L':self.l}
 
+# Custom Button
+class CustomButton(Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.data = None
+        self.background_normal = 'images/board.png'
+        self.color = (0, 0, 0, 0)
 
+    def addpoint(self, data):
+        self.data = data
+        
 class TicTacToe(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -26,21 +37,30 @@ class TicTacToe(GridLayout):
         self.buttons = []
         self.X = Item("x")
         self.O = Item("O")
+        
+        ############################
+        #                          #
+        #    [but1, but2, but3]    #
+        #    [but4, but5, but6]    #
+        #    [but7, but8, but9]    #
+        #                          #
+        ############################
+        
         self.turn_label = None
         Clock.schedule_interval(self.update_turn_label, 0.1)
         for _ in range(3):
             row = []
             for _ in range(3):
-                button = Button(text='', font_size=40, on_press=self.on_button_press)
+                button = CustomButton(on_press=self.on_button_press)
                 row.append(button)
                 self.add_widget(button)
             self.buttons.append(row)
+            
         self.character = self.X   # Turn Player
         self.winner = None
     
-    
-    def changepoint(self, button):
-        #self.X.point = 2
+    # Change Size
+    def changepoint(self, button):  
         if button == "S":
             self.character.point = 1
         elif button == "M" and self.character.m > 0:
@@ -49,7 +69,8 @@ class TicTacToe(GridLayout):
             self.character.point = 3
         print(self.character.point)
 
-    def on_button_press(self, instance):    # if tuch button
+    # If tuch button
+    def on_button_press(self, instance):    
         if instance.text == '':
             instance.text = self.character.name
             if self.check_winner():
@@ -57,7 +78,8 @@ class TicTacToe(GridLayout):
             else:
                 self.character = self.O if self.character == self.X else self.X
 
-    def check_winner(self): # Check winner
+    # Check winner
+    def check_winner(self):
         for i in range(3):
             # Check rows
             if self.buttons[i][0].text == self.buttons[i][1].text == self.buttons[i][2].text != '':
@@ -72,12 +94,14 @@ class TicTacToe(GridLayout):
             return True
         return False
     
-    def show_popup(self, text): # Popup if you win
+    # Popup if you win
+    def show_popup(self, text): 
         popup = Popup(title='Game Over', content=BoxLayout(orientation='vertical'), size_hint=(None, None), size=(400, 200))
         popup.content.add_widget(Button(text=text, size_hint=(None, None), size=(200, 50), pos_hint={'center_x': 0.5, 'center_y': 0.5}, on_press=popup.dismiss))
         popup.open()
         
-    def update_turn_label(self, dt):    #Update Yourturn
+    # Update Yourturn
+    def update_turn_label(self, dt):    
         if self.turn_label:
             self.turn_label.text = f"Is turn : {self.character.name}"
 
