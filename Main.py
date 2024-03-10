@@ -72,27 +72,35 @@ class TicTacToe(GridLayout):
     # If tuch button
     def on_button_press(self, instance):    
         if instance.text == '':
+            self.delet()
             instance.text = self.character.name
             if self.check_winner():
                 self.show_popup(f"{self.character.name} wins!")
             else:
-                self.character = self.O if self.character == self.X else self.X
+                if self.character == self.X:
+                    self.character = self.O
+                else:
+                    self.character = self.X
 
     # Check winner
     def check_winner(self):
-        for i in range(3):
             # Check rows
-            if self.buttons[i][0].text == self.buttons[i][1].text == self.buttons[i][2].text != '':
-                return True
+            for row in self.buttons:
+                if row[0].text == row[1].text == row[2].text != '':
+                    return True
+
             # Check columns
-            if self.buttons[0][i].text == self.buttons[1][i].text == self.buttons[2][i].text != '':
+            for col in range(3):
+                if self.buttons[0][col].text == self.buttons[1][col].text == self.buttons[2][col].text != '':
+                    return True
+
+            # Check diagonals
+            if self.buttons[0][0].text == self.buttons[1][1].text == self.buttons[2][2].text != '':
                 return True
-        # Check diagonals
-        if self.buttons[0][0].text == self.buttons[1][1].text == self.buttons[2][2].text != '':
-            return True
-        if self.buttons[0][2].text == self.buttons[1][1].text == self.buttons[2][0].text != '':
-            return True
-        return False
+            if self.buttons[0][2].text == self.buttons[1][1].text == self.buttons[2][0].text != '':
+                return True
+
+            return False
     
     # Popup if you win
     def show_popup(self, text): 
