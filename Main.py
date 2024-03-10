@@ -73,11 +73,36 @@ class TicTacToe(GridLayout):
     def on_button_press(self, instance):    
         if instance.text == '':
             instance.text = self.character.name
+            instance.addpoint(self.character.point)
+            self.checkimg(instance)
             if self.check_winner():
                 self.show_popup(f"{self.character.name} wins!")
             else:
                 self.character = self.O if self.character == self.X else self.X
 
+    # Check size and put
+    def checkimg(self, button):
+        if button.text == "x":
+            if self.character.point == 1:
+                button.background_normal = 'images/SX.png'
+                button.background_down = 'images/put.png'
+            elif self.character.point == 2:
+                button.background_normal = 'images/MX.png'
+                button.background_down = 'images/put.png'
+            else:
+                button.background_normal = 'images/LX.png'
+                button.background_down = 'images/put.png'
+        else:
+            if self.character.point == 1:
+                button.background_normal = 'images/SO.png'
+                button.background_down = 'images/put.png'
+            elif self.character.point == 2:
+                button.background_normal = 'images/MO.png'
+                button.background_down = 'images/put.png'
+            else:
+                button.background_normal = 'images/LO.png'
+                button.background_down = 'images/put.png'
+                
     # Check winner
     def check_winner(self):
         for i in range(3):
