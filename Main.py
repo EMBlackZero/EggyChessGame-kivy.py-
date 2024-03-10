@@ -129,6 +129,19 @@ class TicTacToe(GridLayout):
     def update_turn_label(self, dt):    
         if self.turn_label:
             self.turn_label.text = f"Is turn : {self.character.name}"
+    
+    def delet(self):   #ลบตัวหมาก
+        print(self.character.name)
+        if self.character.point == 1:
+                self.character.s -= 1
+        elif self.character.point == 2:
+                self.character.m -= 1 
+        elif self.character.point == 3:
+                self.character.l -= 1
+        
+        print('s',self.character.s)
+        print('m',self.character.m)
+        print('l',self.character.l)
 
 class TicTacToeApp(App):
     def build(self):
