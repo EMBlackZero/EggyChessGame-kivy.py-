@@ -86,6 +86,20 @@ class TicTacToe(GridLayout):
                         self.character = self.O
                     else:
                         self.character = self.X
+            else:
+                # Automatically change the point (assuming it's related to grid size)
+                self.autochangepoint()
+                self.delet()
+                instance.text = self.character.name
+                instance.addpoint(self.character.point)
+                self.checkimg(instance)
+                if self.check_winner():
+                    self.show_popup(f"{self.character.name} wins!")
+                else:
+                    if self.character == self.X:
+                        self.character = self.O
+                    else:
+                        self.character = self.X
         # Button != empty
         elif instance.text != '' and not self.winner and instance.text != self.character.name:
             if instance.data < self.character.point:
