@@ -58,7 +58,7 @@ class TicTacToe(GridLayout):
             
         self.character = self.X   # Turn Player
         self.winner = None
-    
+        
     # Change Size
     def changepoint(self, button):  
         if button == "S":
@@ -68,23 +68,40 @@ class TicTacToe(GridLayout):
         else:
             self.character.point = 3
         print(self.character.point)
-
+    
     # If tuch button
-    def on_button_press(self, instance):    
-        if instance.text == '':
-            self.delet()
-            instance.text = self.character.name
-            instance.addpoint(self.character.point)
-            self.checkimg(instance)
-            if self.check_winner():
-                self.show_popup(f"{self.character.name} wins!")
-            else:
-                if self.character == self.X:
-                    self.character = self.O
+    def on_button_press(self, instance):    # instance = button     
+        # Button = empty
+        if instance.text == '' and not self.winner:
+            if self.checksize():
+                self.delet()
+                instance.text = self.character.name
+                instance.addpoint(self.character.point)
+                self.checkimg(instance)
+                # Check winner
+                if self.check_winner():
+                    self.show_popup(f"{self.character.name} wins!")
                 else:
-                    self.character = self.X
-
-    # Check size and put
+                    if self.character == self.X:
+                        self.character = self.O
+                    else:
+                        self.character = self.X
+        # Button != empty
+        elif instance.text != '' and not self.winner and instance.text != self.character.name:
+            if instance.data < self.character.point:
+                self.delet()
+                instance.text = self.character.name
+                instance.data = self.character.point
+                self.checkimg(instance)
+                if self.check_winner():
+                    self.show_popup(f"{self.character.name} wins!")
+                else:
+                    if self.character == self.X:
+                        self.character = self.O
+                    else:
+                        self.character = self.X        
+    
+    # Add img in field
     def checkimg(self, button):
         if button.text == "x":
             if self.character.point == 1:
@@ -106,7 +123,34 @@ class TicTacToe(GridLayout):
             else:
                 button.background_normal = 'images/LO.png'
                 button.background_down = 'images/put.png'
-                
+    
+    # Check size character s m l
+    def checksize(self):
+        if  self.character.point == 1:
+                if self.character.s > 0:
+                    return True
+        elif self.character.point == 2:
+                if self.character.m > 0:
+                    return True
+        elif self.character.point == 3:
+                if self.character.l > 0:
+                    return True
+        return False
+        
+    # Delete amount
+    def delet(self):
+        print(self.character.name)
+        if self.character.point == 1:
+                self.character.s -= 1
+        elif self.character.point == 2:
+                self.character.m -= 1 
+        elif self.character.point == 3:
+                self.character.l -= 1
+        
+        print('s',self.character.s)
+        print('m',self.character.m)
+        print('l',self.character.l)
+        
     # Check winner
     def check_winner(self):
             # Check rows
@@ -126,7 +170,7 @@ class TicTacToe(GridLayout):
                 return True
 
             return False
-    
+
     # Popup if you win
     def show_popup(self, text): 
         popup = Popup(title='Game Over', content=BoxLayout(orientation='vertical'), size_hint=(None, None), size=(400, 200))
@@ -137,19 +181,6 @@ class TicTacToe(GridLayout):
     def update_turn_label(self, dt):    
         if self.turn_label:
             self.turn_label.text = f"Is turn : {self.character.name}"
-    
-    def delet(self):   #ลบตัวหมาก
-        print(self.character.name)
-        if self.character.point == 1:
-                self.character.s -= 1
-        elif self.character.point == 2:
-                self.character.m -= 1 
-        elif self.character.point == 3:
-                self.character.l -= 1
-        
-        print('s',self.character.s)
-        print('m',self.character.m)
-        print('l',self.character.l)
     
     def autochangepoint(self):
             # Adjust the point size based on the available sizes
