@@ -150,6 +150,15 @@ class TicTacToe(GridLayout):
         print('s',self.character.s)
         print('m',self.character.m)
         print('l',self.character.l)
+    
+    def autochangepoint(self):
+            # Adjust the point size based on the available sizes
+            if self.X.s >0:
+                self.character.point = 1              
+            elif self.X.m >0:
+                self.character.point = 2              
+            elif self.X.l >0:
+                self.character.point = 3
 
 class TicTacToeApp(App):
     def build(self):
