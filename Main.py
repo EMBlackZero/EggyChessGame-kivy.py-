@@ -71,6 +71,7 @@ class TicTacToe(GridLayout):
     
     # If tuch button
     def on_button_press(self, instance):    # instance = button     
+        # Button = empty
         if instance.text == '' and not self.winner:
             if self.checksize():
                 self.delet()
@@ -85,6 +86,20 @@ class TicTacToe(GridLayout):
                         self.character = self.O
                     else:
                         self.character = self.X
+        # Button != empty
+        elif instance.text != '' and not self.winner and instance.text != self.character.name:
+            if instance.data < self.character.point:
+                self.delet()
+                instance.text = self.character.name
+                instance.data = self.character.point
+                self.checkimg(instance)
+                if self.check_winner():
+                    self.show_popup(f"{self.character.name} wins!")
+                else:
+                    if self.character == self.X:
+                        self.character = self.O
+                    else:
+                        self.character = self.X        
     
     # Add img in field
     def checkimg(self, button):
