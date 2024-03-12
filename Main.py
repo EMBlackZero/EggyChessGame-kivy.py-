@@ -10,7 +10,9 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.utils import get_color_from_hex
 from kivy.uix.image import Image, AsyncImage
 from kivy.graphics import Color, Rectangle
+from kivy.lang import Builder
 
+Builder.load_file("PlayerXLayout.kv")
 
 # Class Character
 class Item(Label):
@@ -23,7 +25,6 @@ class Item(Label):
         self.m = 3
         self.l = 2  # Quantity of each size
 
-
 # Custom Button
 class CustomButton(Button):
     def __init__(self, **kwargs):
@@ -35,7 +36,7 @@ class CustomButton(Button):
     def addpoint(self, data):
         self.data = data
 
-
+# Game Main
 class TicTacToe(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -54,6 +55,8 @@ class TicTacToe(GridLayout):
 
         self.turn_label = None
         Clock.schedule_interval(self.update_turn_label, 0.1)
+        # Clock.schedule_interval(self.update_total_X, 0.1)
+        # Clock.schedule_interval(self.update_total_O, 0.1)
         for _ in range(3):
             row = []
             for _ in range(3):
@@ -76,7 +79,7 @@ class TicTacToe(GridLayout):
             self.character.point = 3
 
         else:
-            pass  # prin(button size emty)
+            self.show_popup("button size emty")
 
     # If tuch button
     def on_button_press(self, instance):  # instance = button
@@ -216,7 +219,7 @@ class TicTacToe(GridLayout):
     # Popup if you win
     def show_popup(self, text):
         popup = Popup(
-            title="Game Over",
+            # title="Game Over",
             content=BoxLayout(orientation="vertical"),
             size_hint=(None, None),
             size=(400, 200),
@@ -244,6 +247,10 @@ class TicTacToe(GridLayout):
                 size = "L"
 
             self.turn_label.text = f"Is turn: {self.character.name} Size: {size}"
+            
+    # def update_total_X(self, dt):
+    #     if self.turn_label and self.character:
+            
 
     def autochangepoint(self):
         # Adjust the point size based on the available sizes
@@ -254,10 +261,45 @@ class TicTacToe(GridLayout):
         elif self.X.l > 0:
             self.character.point = 3
 
+# Status Player X
+class PlayerXLayout(FloatLayout):
+    def __init__(self, **kwargs):
+        super(PlayerXLayout, self).__init__(**kwargs)
+        self.size_hint = (None, None)
+        self.pos_hint = {"center_x": 0.2, "center_y": 0.45}
 
+        self.nameX = Label(
+            text="Player X",
+            font_size=40,
+            size_hint=(None, None),
+            pos_hint={"center_x": 0.5, "y": 4.5},
+        )
+        
+        self.add_widget(self.nameX)
+        
+# Status Player y
+class PlayerOLayout(FloatLayout):
+    def __init__(self, **kwargs):
+        super(PlayerOLayout, self).__init__(**kwargs)
+        self.size_hint = (None, None)
+        self.pos_hint = {"center_x": 0.8, "center_y": 0.45}
+
+        self.name = Label(
+            text="Player O",
+            font_size=40,
+            size_hint=(None, None),
+            pos_hint={"center_x": 0.5, "y": 4.5},
+        )
+        
+        text = Label(text="total size", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 3.5})
+        
+        self.add_widget(self.name)
+        self.add_widget(text)
+        
+# Run Game
 class TicTacToeApp(App):
     def build(self):
-        game = FloatLayout()
+        game = FloatLayout(size_hint=(1, 1))
 
         title = Label(
             text="Tic tac toc",
@@ -283,37 +325,40 @@ class TicTacToeApp(App):
         S = Button(text="S", on_press=lambda instance: mapp.changepoint("S"))
         M = Button(text="M", on_press=lambda instance: mapp.changepoint("M"))
         L = Button(text="L", on_press=lambda instance: mapp.changepoint("L"))
+        
+        playerX = PlayerXLayout()
+        playerO = PlayerOLayout()
 
-        playerX = FloatLayout(
-            # orientation="vertical",
-            size_hint=(None, None),
-            # size=(800, 1000),
-            pos_hint={
-                "center_x": 0.2,
-                "center_y": 0.45,
-            },
-        )
-        nameX = Label(
-            text="Player X",
-            font_size=40,
-            size_hint=(None, None),
-            pos_hint={
-                "center_x": 0.5,
-                "y": 4.5,
-            },
-        )
-        image = AsyncImage(
-            source="https://i.pinimg.com/736x/36/c5/ec/36c5ec25c86a46a07e45fc37fb9d8398.jpg",  # กำหนด path ของไฟล์ภาพที่ต้องการใช้
-            size_hint=(
-                None,
-                None,
-            ),  # กำหนด size_hint เป็น None เพื่อให้กำหนดขนาดแบบ explicit
-            size=(550, 1000),  # กำหนดขนาดของภาพให้เท่ากับขนาดของ playerX
-            pos_hint={
-                "center_x": 0.5,
-                "center_y": 0.5,
-            },
-        )
+        # playerX = FloatLayout(
+        #     # orientation="vertical",
+        #     size_hint=(None, None),
+        #     # size=(800, 1000),
+        #     pos_hint={
+        #         "center_x": 0.2,
+        #         "center_y": 0.45,
+        #     },
+        # )
+        # nameX = Label(
+        #     text="Player X",
+        #     font_size=40,
+        #     size_hint=(None, None),
+        #     pos_hint={
+        #         "center_x": 0.5,
+        #         "y": 4.5,
+        #     },
+        # )
+        # image = AsyncImage(
+        #     source="https://i.pinimg.com/736x/36/c5/ec/36c5ec25c86a46a07e45fc37fb9d8398.jpg",  # กำหนด path ของไฟล์ภาพที่ต้องการใช้
+        #     size_hint=(
+        #         None,
+        #         None,
+        #     ),  # กำหนด size_hint เป็น None เพื่อให้กำหนดขนาดแบบ explicit
+        #     size=(550, 1000),  # กำหนดขนาดของภาพให้เท่ากับขนาดของ playerX
+        #     pos_hint={
+        #         "center_x": 0.5,
+        #         "center_y": 0.5,
+        #     },
+        # )
 
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         # Add widget
@@ -321,13 +366,15 @@ class TicTacToeApp(App):
         sett.add_widget(S)
         sett.add_widget(M)
         sett.add_widget(L)
-        playerX.add_widget(image)
-        playerX.add_widget(nameX)
+        # playerX.add_widget(image)
+        # playerX.add_widget(nameX)
         game.add_widget(title)  # Game name
         game.add_widget(mapp)  # Game
         game.add_widget(turn)  # Your Turn
         game.add_widget(sett)  # chang size
+        # game.add_widget(playerX)  # Status player X
         game.add_widget(playerX)  # Status player X
+        game.add_widget(playerO)  # Status player X
         # return TicTacToe()
         return game
 
