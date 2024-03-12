@@ -9,6 +9,7 @@ from kivy.clock import Clock
 from kivy.uix.floatlayout import FloatLayout
 from kivy.utils import get_color_from_hex
 from kivy.uix.image import Image, AsyncImage
+from kivy.graphics import Color, Rectangle
 
 
 # Class Character
@@ -234,16 +235,15 @@ class TicTacToe(GridLayout):
     # Update Yourturn
     def update_turn_label(self, dt):
         if self.turn_label and self.character:
-            size = ''
+            size = ""
             if self.character.point == 1:
-                size = 'S'
+                size = "S"
             elif self.character.point == 2:
-                size = 'M'
+                size = "M"
             elif self.character.point == 3:
-                size = 'L'
-            
-            self.turn_label.text = f"Is turn: {self.character.name} Size: {size}"
+                size = "L"
 
+            self.turn_label.text = f"Is turn: {self.character.name} Size: {size}"
 
     def autochangepoint(self):
         # Adjust the point size based on the available sizes
@@ -253,17 +253,18 @@ class TicTacToe(GridLayout):
             self.character.point = 2
         elif self.X.l > 0:
             self.character.point = 3
-   
-        
+
 
 class TicTacToeApp(App):
     def build(self):
         game = FloatLayout()
+
         title = Label(
             text="Tic tac toc",
             font_size=40,
             pos_hint={"center_x": 0.5, "center_y": 0.9},
         )
+
         mapp = TicTacToe(
             size_hint=(None, None),
             size=(500, 500),
@@ -271,6 +272,7 @@ class TicTacToeApp(App):
         )
 
         turn = Label(font_size=40, pos_hint={"center_x": 0.5, "center_y": 0.3})
+
         mapp.turn_label = turn
 
         sett = BoxLayout(
@@ -278,20 +280,54 @@ class TicTacToeApp(App):
             size=(500, 100),
             pos_hint={"center_x": 0.5, "center_y": 0.1},
         )
-        
         S = Button(text="S", on_press=lambda instance: mapp.changepoint("S"))
         M = Button(text="M", on_press=lambda instance: mapp.changepoint("M"))
         L = Button(text="L", on_press=lambda instance: mapp.changepoint("L"))
-        
+
+        playerX = FloatLayout(
+            # orientation="vertical",
+            size_hint=(None, None),
+            # size=(800, 1000),
+            pos_hint={
+                "center_x": 0.2,
+                "center_y": 0.45,
+            },
+        )
+        nameX = Label(
+            text="Player X",
+            font_size=40,
+            size_hint=(None, None),
+            pos_hint={
+                "center_x": 0.5,
+                "y": 4.5,
+            },
+        )
+        image = AsyncImage(
+            source="https://i.pinimg.com/736x/36/c5/ec/36c5ec25c86a46a07e45fc37fb9d8398.jpg",  # กำหนด path ของไฟล์ภาพที่ต้องการใช้
+            size_hint=(
+                None,
+                None,
+            ),  # กำหนด size_hint เป็น None เพื่อให้กำหนดขนาดแบบ explicit
+            size=(550, 1000),  # กำหนดขนาดของภาพให้เท่ากับขนาดของ playerX
+            pos_hint={
+                "center_x": 0.5,
+                "center_y": 0.5,
+            },
+        )
+
+        # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        # Add widget
+        # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         sett.add_widget(S)
         sett.add_widget(M)
         sett.add_widget(L)
-        
-
+        playerX.add_widget(image)
+        playerX.add_widget(nameX)
         game.add_widget(title)  # Game name
         game.add_widget(mapp)  # Game
         game.add_widget(turn)  # Your Turn
         game.add_widget(sett)  # chang size
+        game.add_widget(playerX)  # Status player X
         # return TicTacToe()
         return game
 
