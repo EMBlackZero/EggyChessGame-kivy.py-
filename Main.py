@@ -60,14 +60,16 @@ class TicTacToe(GridLayout):
         self.winner = None
         
     # Change Size
-    def changepoint(self, button):  
-        if button == "S":
+    def changepoint(self, button):
+        #self.X.point = 2
+        if button == "S" and self.character.s > 0:
             self.character.point = 1
         elif button == "M" and self.character.m > 0:
             self.character.point = 2
-        else:
+        elif button == "L" and self.character.l > 0:
             self.character.point = 3
-        print(self.character.point)
+        else:
+            pass # prin(button size emty)
     
     # If tuch button
     def on_button_press(self, instance):    # instance = button     
