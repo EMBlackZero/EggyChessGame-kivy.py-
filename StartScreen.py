@@ -2,6 +2,8 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+
 
 
 class StartScreen(App):
@@ -35,6 +37,14 @@ class StartScreen(App):
         )
         layout.add_widget(player1_label)
         layout.add_widget(player2_label)
+
+        # เพิ่มช่องกรอกชื่อ Player 1 และ Player 2
+        player1_input = TextInput(multiline=False, size_hint=(None, None), size=(200, 30),
+                                  pos_hint={'right': 0.25, 'center_y': 0.8})
+        player2_input = TextInput(multiline=False, size_hint=(None, None), size=(200, 30),
+                                  pos_hint={'right': 0.95, 'center_y': 0.8})
+        layout.add_widget(player1_input)
+        layout.add_widget(player2_input)
 
         return layout
 

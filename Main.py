@@ -276,7 +276,7 @@ class PlayerXLayout(FloatLayout):
         )
         
         self.add_widget(self.nameX)
-        
+            
 # Status Player y
 class PlayerOLayout(FloatLayout):
     def __init__(self, **kwargs):
