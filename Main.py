@@ -55,8 +55,6 @@ class TicTacToe(GridLayout):
 
         self.turn_label = None
         Clock.schedule_interval(self.update_turn_label, 0.1)
-        # Clock.schedule_interval(self.update_total_X, 0.1)
-        # Clock.schedule_interval(self.update_total_O, 0.1)
         for _ in range(3):
             row = []
             for _ in range(3):
@@ -166,6 +164,12 @@ class TicTacToe(GridLayout):
             if self.character.l > 0:
                 return True
         return False
+    
+    def update_status_labels(self):
+        # Update StatusXLayout
+        self.status_x_layout.update_sizes(self.X.s, self.X.m, self.X.l)
+        # Update StatusOLayout
+        self.status_o_layout.update_sizes(self.O.s, self.O.m, self.O.l)
 
     # Delete amount
     def delet(self):
@@ -180,6 +184,9 @@ class TicTacToe(GridLayout):
         print("s", self.character.s)
         print("m", self.character.m)
         print("l", self.character.l)
+        
+        # Update status labels
+        self.update_status_labels()
 
     # Check winner
     def check_winner(self):
@@ -247,11 +254,8 @@ class TicTacToe(GridLayout):
                 size = "L"
 
             self.turn_label.text = f"Is turn: {self.character.name} Size: {size}"
-            
-    # def update_total_X(self, dt):
-    #     if self.turn_label and self.character:
-            
 
+    # Auto change size if size = 0
     def autochangepoint(self):
         # Adjust the point size based on the available sizes
         if self.X.s > 0:
@@ -262,9 +266,9 @@ class TicTacToe(GridLayout):
             self.character.point = 3
 
 # Status Player X
-class PlayerXLayout(FloatLayout):
+class StatusXLayout(FloatLayout):
     def __init__(self, **kwargs):
-        super(PlayerXLayout, self).__init__(**kwargs)
+        super(StatusXLayout, self).__init__(**kwargs)
         self.size_hint = (None, None)
         self.pos_hint = {"center_x": 0.2, "center_y": 0.45}
 
@@ -277,10 +281,13 @@ class PlayerXLayout(FloatLayout):
         
         self.add_widget(self.nameX)
         
+    def update_sizes(self, s, m, l):
+        pass
+        
 # Status Player y
-class PlayerOLayout(FloatLayout):
+class StatusOLayout(FloatLayout):
     def __init__(self, **kwargs):
-        super(PlayerOLayout, self).__init__(**kwargs)
+        super(StatusOLayout, self).__init__(**kwargs)
         self.size_hint = (None, None)
         self.pos_hint = {"center_x": 0.8, "center_y": 0.45}
 
@@ -296,6 +303,18 @@ class PlayerOLayout(FloatLayout):
         self.add_widget(self.name)
         self.add_widget(text)
         
+        self.textS = Label(text=f"size S = 0", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 2.5})
+        self.textM = Label(text=f"size M = 0", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 2})
+        self.textL = Label(text=f"size L = 0", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 1.5})
+        self.add_widget(self.textS)
+        self.add_widget(self.textM)
+        self.add_widget(self.textL)
+
+    def update_sizes(self, s, m, l):
+        self.textS.text = f"size S = {s}"
+        self.textM.text = f"size M = {m}"
+        self.textL.text = f"size L = {l}"
+    
 # Run Game
 class TicTacToeApp(App):
     def build(self):
@@ -326,39 +345,10 @@ class TicTacToeApp(App):
         M = Button(text="M", on_press=lambda instance: mapp.changepoint("M"))
         L = Button(text="L", on_press=lambda instance: mapp.changepoint("L"))
         
-        playerX = PlayerXLayout()
-        playerO = PlayerOLayout()
-
-        # playerX = FloatLayout(
-        #     # orientation="vertical",
-        #     size_hint=(None, None),
-        #     # size=(800, 1000),
-        #     pos_hint={
-        #         "center_x": 0.2,
-        #         "center_y": 0.45,
-        #     },
-        # )
-        # nameX = Label(
-        #     text="Player X",
-        #     font_size=40,
-        #     size_hint=(None, None),
-        #     pos_hint={
-        #         "center_x": 0.5,
-        #         "y": 4.5,
-        #     },
-        # )
-        # image = AsyncImage(
-        #     source="https://i.pinimg.com/736x/36/c5/ec/36c5ec25c86a46a07e45fc37fb9d8398.jpg",  # กำหนด path ของไฟล์ภาพที่ต้องการใช้
-        #     size_hint=(
-        #         None,
-        #         None,
-        #     ),  # กำหนด size_hint เป็น None เพื่อให้กำหนดขนาดแบบ explicit
-        #     size=(550, 1000),  # กำหนดขนาดของภาพให้เท่ากับขนาดของ playerX
-        #     pos_hint={
-        #         "center_x": 0.5,
-        #         "center_y": 0.5,
-        #     },
-        # )
+        # Create StatusXLayout
+        status_x_layout = StatusXLayout()
+        # Create StatusOLayout
+        status_o_layout = StatusOLayout()
 
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         # Add widget
@@ -366,18 +356,22 @@ class TicTacToeApp(App):
         sett.add_widget(S)
         sett.add_widget(M)
         sett.add_widget(L)
-        # playerX.add_widget(image)
-        # playerX.add_widget(nameX)
         game.add_widget(title)  # Game name
         game.add_widget(mapp)  # Game
         game.add_widget(turn)  # Your Turn
         game.add_widget(sett)  # chang size
-        # game.add_widget(playerX)  # Status player X
-        game.add_widget(playerX)  # Status player X
-        game.add_widget(playerO)  # Status player X
+        game.add_widget(status_x_layout)  # Status player X
+        game.add_widget(status_o_layout)  # Status player O
         # return TicTacToe()
-        return game
+        
+        # Store references to status layouts in TicTacToe instance
+        mapp.status_x_layout = status_x_layout
+        mapp.status_o_layout = status_o_layout
 
+        # Update status labels initially
+        mapp.update_status_labels()
+        
+        return game
 
 if __name__ == "__main__":
     TicTacToeApp().run()
