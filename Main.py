@@ -389,8 +389,10 @@ class BackgroundWidget(Widget):
         self.rect.size = instance.size
         
 # Run Game
-class TicTacToeApp(App):
-    def build(self):
+from kivy.uix.screenmanager import Screen
+
+class TicTacToeApp(Screen):
+    def on_enter(self):
         game = FloatLayout(size_hint=(1, 1))
         
         background = BackgroundWidget()
@@ -447,7 +449,15 @@ class TicTacToeApp(App):
         # Update status labels initially
         mapp.update_status_labels()
         
-        return game
+        self.add_widget(game)
 
+
+class MyApp(App):
+    def build(self):
+        # สร้าง ScreenManager เพื่อจัดการหน้าจอ
+        sm = ScreenManager()
+        sm.add_widget(StartScreen(name="start"))
+        sm.add_widget(TicTacToeApp(name="game"))
+        return sm
 if __name__ == "__main__":
-    TicTacToeApp().run()
+    MyApp().run()
