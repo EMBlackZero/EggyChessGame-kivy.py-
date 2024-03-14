@@ -1,4 +1,5 @@
 from kivy.app import App
+from kivy.config import Config
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
@@ -9,9 +10,11 @@ from kivy.clock import Clock
 from kivy.uix.floatlayout import FloatLayout
 from kivy.utils import get_color_from_hex
 from kivy.uix.image import Image, AsyncImage
-from kivy.graphics import Color, Rectangle
+from kivy.graphics import Color, Rectangle, Mesh
 from kivy.lang import Builder
+from kivy.uix.widget import Widget
 
+Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
 
 # Class Character
@@ -315,10 +318,27 @@ class StatusOLayout(FloatLayout):
         self.textM.text = f"size M = {m}"
         self.textL.text = f"size L = {l}"
     
+class BackgroundWidget(Widget):
+    def __init__(self, **kwargs):
+        super(BackgroundWidget, self).__init__(**kwargs)
+
+        with self.canvas:
+            # Color(1, 1, 0, 1)
+            self.rect = Rectangle(source='images/BG2.png',pos=self.pos, size=self.size)
+            
+        self.bind(size=self._update_rect, pos=self._update_rect)
+        
+    def _update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
+        
 # Run Game
 class TicTacToeApp(App):
     def build(self):
         game = FloatLayout(size_hint=(1, 1))
+        
+        background = BackgroundWidget()
+        game.add_widget(background)
 
         title = Label(
             text="Tic tac toc",
@@ -356,7 +376,7 @@ class TicTacToeApp(App):
         sett.add_widget(S)
         sett.add_widget(M)
         sett.add_widget(L)
-        game.add_widget(title)  # Game name
+        # game.add_widget(title)  # Game name
         game.add_widget(mapp)  # Game
         game.add_widget(turn)  # Your Turn
         game.add_widget(sett)  # chang size
