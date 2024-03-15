@@ -15,7 +15,8 @@ from kivy.lang import Builder
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
-Config.set("graphics", "fullscreen", "auto")
+
+# Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
 
 
@@ -64,7 +65,7 @@ class CustomButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.data = None
-        self.background_normal = "images/board.png"
+        self.background_normal = "images/Board4.png"
         self.color = (0, 0, 0, 0)
 
     def addpoint(self, data):
@@ -355,7 +356,8 @@ class BackgroundWidget(Widget):
 
         with self.canvas:
             # Color(1, 1, 0, 1)
-            self.rect = Rectangle(source='images/BG2.png',pos=self.pos, size=self.size)
+            # self.rect = Rectangle(pos=self.pos, size=self.size)
+            self.rect = Rectangle(source='images/BG5.png',pos=self.pos, size=self.size)
             
         self.bind(size=self._update_rect, pos=self._update_rect)
         
@@ -373,19 +375,19 @@ class TicTacToeApp(Screen):
         background = BackgroundWidget()
         game.add_widget(background)
 
-        title = Label(
-            text="Tic tac toc",
-            font_size=40,
-            pos_hint={"center_x": 0.5, "center_y": 0.9},
-        )
+        # title = Label(
+        #     text="Tic tac toc",
+        #     font_size=40,
+        #     pos_hint={"center_x": 0.5, "center_y": 0.9},
+        # )
 
         mapp = TicTacToe(
             size_hint=(None, None),
             size=(500, 500),
-            pos_hint={"center_x": 0.5, "center_y": 0.6},
+            pos_hint={"center_x": 0.5, "center_y": 0.5},
         )
 
-        turn = Label(font_size=40, pos_hint={"center_x": 0.5, "center_y": 0.3})
+        turn = Label(font_size=40, pos_hint={"center_x": 0.5, "center_y": 0.2})
 
         mapp.turn_label = turn
 
