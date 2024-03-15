@@ -13,6 +13,8 @@ from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.graphics.context_instructions import Color
 from kivy.uix.image import Image, AsyncImage
+from kivy.core.audio import SoundLoader
+
 
 # Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
@@ -30,13 +32,14 @@ class StartScreen(Screen):
         with self.layout.canvas:
             Color(1, 1, 1, 1) 
             self.background = Rectangle(
-                source="images/BG5.png", size=self.size, pos=self.pos
+                source="images/BG6.png", size=self.size, pos=self.pos
             )
-            
+
+        # สร้างปุ่ม "Start"
         start_button = Button(
             size_hint=(None, None),
-            size=(500, 150),
-            pos_hint={"center_x": 0.5, "center_y": 0.5},
+            size=(250, 60),
+            pos_hint={"center_x": 0.5, "center_y": 0.28},
             background_normal="images/startbutton.png",  # Set background image
         )
         start_button.bind(on_press=self.on_start_button_press)
@@ -48,12 +51,15 @@ class StartScreen(Screen):
 
     # close startscreen 
     def on_start_button_press(self, instance):
+        instance.background_down = "images/startbutton.png"
         app = App.get_running_app()
         app.root.current = "game"
 
     def on_size(self, *args):
         self.background.size = self.size
         self.background.pos = self.pos
+    win_sound = SoundLoader.load('images/New/backgroundmusic.mp3')
+    win_sound.play()
         
 # Class Character
 class Item(Label):
@@ -277,7 +283,7 @@ class TicTacToe(GridLayout):
     # Popup if you win
     def show_popup(self, text):
         popup = Popup(
-            # title="Game Over",
+            title="Finish Game ",
             content=BoxLayout(orientation="vertical"),
             size_hint=(None, None),
             size=(400, 200),
@@ -291,8 +297,17 @@ class TicTacToe(GridLayout):
                 on_press=popup.dismiss,
             )
         )
+        
+        if self.character.name == "x" and text!='button size emty':
+            win_sound = SoundLoader.load('images/New/winX.mp3')
+            win_sound.play()
+        elif self.character.name == "O"and text!='button size emty':
+            win_sound = SoundLoader.load('images/New/winO.mp3')
+            win_sound.play()
+        elif  text =='button size emty':
+            win_sound = SoundLoader.load('images/New/buttonsizeemty.mp3')
+            win_sound.play()
         popup.open()
-
     # Update Yourturn
     def update_turn_label(self, dt):
         if self.turn_label and self.character:
@@ -448,6 +463,7 @@ class MyApp(App):
         sm = ScreenManager()
         sm.add_widget(StartScreen(name="start"))
         sm.add_widget(TicTacToeApp(name="game"))
+        
         return sm
 
 if __name__ == "__main__":
