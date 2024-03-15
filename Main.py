@@ -285,11 +285,14 @@ class TicTacToe(GridLayout):
             )
         )
         
-        if self.character.name == "x":
+        if self.character.name == "x" and text!='button size emty':
             win_sound = SoundLoader.load('images/New/winX.mp3')
             win_sound.play()
-        elif self.character.name == "O":
+        elif self.character.name == "O"and text!='button size emty':
             win_sound = SoundLoader.load('images/New/winO.mp3')
+            win_sound.play()
+        elif  text =='button size emty':
+            win_sound = SoundLoader.load('images/New/buttonsizeemty.mp3')
             win_sound.play()
         popup.open()
     # Update Yourturn
