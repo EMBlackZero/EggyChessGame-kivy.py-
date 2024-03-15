@@ -13,6 +13,8 @@ from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.graphics.context_instructions import Color
 from kivy.uix.image import Image, AsyncImage
+from kivy.core.audio import SoundLoader
+
 
 # Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
@@ -46,6 +48,7 @@ class StartScreen(Screen):
 
     # close startscreen 
     def on_start_button_press(self, instance):
+        instance.background_down = "images/startbutton.png"
         app = App.get_running_app()
         app.root.current = "game"
 
@@ -279,8 +282,14 @@ class TicTacToe(GridLayout):
                 on_press=popup.dismiss,
             )
         )
+        
+        if self.character.name == "x":
+            win_sound = SoundLoader.load('images/New/winX.mp3')
+            win_sound.play()
+        elif self.character.name == "O":
+            win_sound = SoundLoader.load('images/New/winO.mp3')
+            win_sound.play()
         popup.open()
-
     # Update Yourturn
     def update_turn_label(self, dt):
         if self.turn_label and self.character:
