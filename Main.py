@@ -1,56 +1,36 @@
 from kivy.app import App
 from kivy.config import Config
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.clock import Clock
-from kivy.uix.floatlayout import FloatLayout
-from kivy.utils import get_color_from_hex
-from kivy.uix.image import Image, AsyncImage
-from kivy.graphics import Color, Rectangle, Ellipse
 from kivy.lang import Builder
-from kivy.uix.textinput import TextInput
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.label import Label
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+from kivy.clock import Clock
+from kivy.graphics import Color, Rectangle, Ellipse
 from kivy.uix.widget import Widget
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.graphics.context_instructions import Color
+from kivy.uix.image import Image, AsyncImage
 
-Config.set("graphics", "fullscreen", "auto")
+# Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
 
-<<<<<<< HEAD
-# Start Screen Page (Before Main)
-=======
-
-from kivy.uix.image import Image
-
-from kivy.graphics import Rectangle
-from kivy.graphics.context_instructions import Color
-
-
->>>>>>> 033f0adf2197923b7a5fdcdeeb5caff8203ca16d
+# Start
 class StartScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.layout = FloatLayout()
 
-<<<<<<< HEAD
-        # create start button
-=======
-        # เพิ่มพื้นหลังเต็มหน้าจอโดยใช้ Rectangle
+        # Add bg full srceen with Rectangle
         with self.layout.canvas:
-            # กำหนดสีพื้นหลัง
-            Color(1, 1, 1, 1)  # เปลี่ยนสีตามที่ต้องการ
-            # สร้าง Rectangle ที่ครอบคลุมพื้นที่ขนาดเต็มหน้าจอ
+            Color(1, 1, 1, 1) 
             self.background = Rectangle(
                 source="images/BG5.png", size=self.size, pos=self.pos
             )
-
-        # สร้างปุ่ม "Start"
->>>>>>> 033f0adf2197923b7a5fdcdeeb5caff8203ca16d
-        start_button = Button(
             
+        start_button = Button(
             size_hint=(None, None),
             size=(500, 150),
             pos_hint={"center_x": 0.5, "center_y": 0.5},
@@ -61,60 +41,17 @@ class StartScreen(Screen):
         # Add "Start" button in layout
         self.layout.add_widget(start_button)
 
-<<<<<<< HEAD
-        # Add name tag for player 1 and 2
-        player1_label = Label(
-            text="Player 1",
-            size_hint=(None, None),
-            size=(100, 30),
-            pos_hint={"right": 0.2, "center_y": 0.9},
-        )
-        player2_label = Label(
-            text="Player 2",
-            size_hint=(None, None),
-            size=(100, 30),
-            pos_hint={"right": 0.9, "center_y": 0.9},
-        )
-        self.layout.add_widget(player1_label)
-        self.layout.add_widget(player2_label)
-
-        # Add Input name for player 1 and 2
-        self.player1_input = TextInput(
-            multiline=False, size_hint=(None, None), size=(200, 30), pos_hint={'right': 0.25, 'center_y': 0.8}
-        )
-        self.player2_input = TextInput(
-            multiline=False, size_hint=(None, None), size=(200, 30), pos_hint={'right': 0.95, 'center_y': 0.8}
-        )
-        self.layout.add_widget(self.player1_input)
-        self.layout.add_widget(self.player2_input)
-
         self.add_widget(self.layout)
 
+    # close startscreen 
     def on_start_button_press(self, instance):
-        # Close StartScreen
-        player1_name = self.player1_input.text
-        player2_name = self.player2_input.text
-        print("Player 1:", player1_name)
-        print("Player 2:", player2_name)
-
-        app = App.get_running_app()
-        app.root.current = "game"
-        
-=======
-        self.add_widget(self.layout)
-
-    def on_start_button_press(self, instance):
-        # ปิดหน้าจอ StartScreen ปัจจุบัน
         app = App.get_running_app()
         app.root.current = "game"
 
     def on_size(self, *args):
-        # อัปเดตขนาดของ Rectangle เมื่อขนาดของหน้าจอเปลี่ยนแปลง
         self.background.size = self.size
         self.background.pos = self.pos
-
-
->>>>>>> 033f0adf2197923b7a5fdcdeeb5caff8203ca16d
+        
 # Class Character
 class Item(Label):
     def __init__(self, namee, **kwargs):
@@ -126,7 +63,6 @@ class Item(Label):
         self.m = 3
         self.l = 2  # Quantity of each size
 
-
 # Custom Button
 class CustomButton(Button):
     def __init__(self, **kwargs):
@@ -137,7 +73,6 @@ class CustomButton(Button):
 
     def addpoint(self, data):
         self.data = data
-
 
 # Game Main
 class TicTacToe(GridLayout):
@@ -368,7 +303,6 @@ class TicTacToe(GridLayout):
         elif self.X.l > 0:
             self.character.point = 3
 
-
 # Status Player X
 class StatusXLayout(FloatLayout):
     def __init__(self, **kwargs):
@@ -387,7 +321,6 @@ class StatusXLayout(FloatLayout):
 
     def update_sizes(self, s, m, l):
         pass
-
 
 # Status Player y
 class StatusOLayout(FloatLayout):
@@ -428,7 +361,8 @@ class StatusOLayout(FloatLayout):
         self.textS.text = f"{s}"
         self.textM.text = f"{m}"
         self.textL.text = f"{l}"
-    
+
+# Bg Game main
 class BackgroundWidget(Widget):
     def __init__(self, **kwargs):
         super(BackgroundWidget, self).__init__(**kwargs)
@@ -444,23 +378,13 @@ class BackgroundWidget(Widget):
         self.rect.pos = instance.pos
         self.rect.size = instance.size
 
-
 # Run Game
-from kivy.uix.screenmanager import Screen
-
-
 class TicTacToeApp(Screen):
     def on_enter(self):
         game = FloatLayout(size_hint=(1, 1))
 
         background = BackgroundWidget()
         game.add_widget(background)
-
-        # title = Label(
-        #     text="Tic tac toc",
-        #     font_size=40,
-        #     pos_hint={"center_x": 0.5, "center_y": 0.9},
-        # )
 
         mapp = TicTacToe(
             size_hint=(None, None),
@@ -509,7 +433,7 @@ class TicTacToeApp(Screen):
 
         self.add_widget(game)
 
-
+# First page game
 class MyApp(App):
     def build(self):
         # สร้าง ScreenManager เพื่อจัดการหน้าจอ
@@ -517,7 +441,6 @@ class MyApp(App):
         sm.add_widget(StartScreen(name="start"))
         sm.add_widget(TicTacToeApp(name="game"))
         return sm
-
 
 if __name__ == "__main__":
     MyApp().run()
