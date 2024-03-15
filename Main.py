@@ -37,40 +37,15 @@ class StartScreen(Screen):
         self.layout.add_widget(start_button)
 
         # เพิ่มป้ายชื่อสำหรับผู้เล่น 1 และ 2
-        player1_label = Label(
-            text="Player 1",
-            size_hint=(None, None),
-            size=(100, 30),
-            pos_hint={"right": 0.2, "center_y": 0.9},
-        )
-        player2_label = Label(
-            text="Player 2",
-            size_hint=(None, None),
-            size=(100, 30),
-            pos_hint={"right": 0.9, "center_y": 0.9},
-        )
-        self.layout.add_widget(player1_label)
-        self.layout.add_widget(player2_label)
+       
 
         # เพิ่มช่องกรอกข้อความสำหรับผู้เล่น 1 และ 2
-        self.player1_input = TextInput(
-            multiline=False, size_hint=(None, None), size=(200, 30), pos_hint={'right': 0.25, 'center_y': 0.8}
-        )
-        self.player2_input = TextInput(
-            multiline=False, size_hint=(None, None), size=(200, 30), pos_hint={'right': 0.95, 'center_y': 0.8}
-        )
-        self.layout.add_widget(self.player1_input)
-        self.layout.add_widget(self.player2_input)
+        
 
         self.add_widget(self.layout)
 
     def on_start_button_press(self, instance):
         # ปิดหน้าจอ StartScreen ปัจจุบัน
-        player1_name = self.player1_input.text
-        player2_name = self.player2_input.text
-        print("Player 1:", player1_name)
-        print("Player 2:", player2_name)
-
         app = App.get_running_app()
         app.root.current = "game"
 # Class Character
