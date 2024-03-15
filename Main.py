@@ -55,6 +55,8 @@ class StartScreen(Screen):
     def on_size(self, *args):
         self.background.size = self.size
         self.background.pos = self.pos
+    win_sound = SoundLoader.load('images/New/backgroundmusic.mp3')
+    win_sound.play()
         
 # Class Character
 class Item(Label):
@@ -447,6 +449,7 @@ class MyApp(App):
         sm = ScreenManager()
         sm.add_widget(StartScreen(name="start"))
         sm.add_widget(TicTacToeApp(name="game"))
+        
         return sm
 
 if __name__ == "__main__":
