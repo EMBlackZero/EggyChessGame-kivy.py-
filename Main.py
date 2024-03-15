@@ -171,24 +171,24 @@ class TicTacToe(GridLayout):
     def checkimg(self, button):
         if button.text == "x":
             if self.character.point == 1:
-                button.background_normal = "images/SX.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/SX.png"
+                button.background_down = "images/New/put.png"
             elif self.character.point == 2:
-                button.background_normal = "images/MX.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/MX.png"
+                button.background_down = "images/New/put.png"
             else:
-                button.background_normal = "images/LX.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/LX.png"
+                button.background_down = "images/New/put.png"
         else:
             if self.character.point == 1:
-                button.background_normal = "images/SO.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/SO.png"
+                button.background_down = "images/New/put.png"
             elif self.character.point == 2:
-                button.background_normal = "images/MO.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/MO.png"
+                button.background_down = "images/New/put.png"
             else:
-                button.background_normal = "images/LO.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/LO.png"
+                button.background_down = "images/New/put.png"
 
     # Check size character s m l
     def checksize(self):
@@ -303,46 +303,43 @@ class TicTacToe(GridLayout):
         elif self.X.l > 0:
             self.character.point = 3
 
-# Status Player X
+# Status Player X White
 class StatusXLayout(FloatLayout):
     def __init__(self, **kwargs):
         super(StatusXLayout, self).__init__(**kwargs)
         self.size_hint = (None, None)
         self.pos_hint = {"center_x": 0.2, "center_y": 0.45}
-
-        self.nameX = Label(
-            text="Player X",
-            font_size=40,
-            size_hint=(None, None),
-            pos_hint={"center_x": 0.5, "y": 4.5},
-        )
-
+        self.nameX = Label(text=f"Player X", font_size=40, color=(1, 1, 1, 1), pos_hint={"center_x": 0.001, "y": 0.6},)
         self.add_widget(self.nameX)
+    
+        # Add circle 
+        with self.canvas:
+            Color(1, 1, 1, 1)
+            self.circle1 = Ellipse(pos=(170, 330), size=(50, 50))
+            self.circle2 = Ellipse(pos=(330, 330), size=(50, 50))
+            self.circle3 = Ellipse(pos=(490, 335), size=(50, 50))
+        
+        self.textS = Label(text=f"0", font_size=30, color=(0, 0, 0, 1), pos=(466, 306))
+        self.textM = Label(text=f"0", font_size=30, color=(0, 0, 0, 1), pos=(306, 306))
+        self.textL = Label(text=f"0", font_size=30, color=(0, 0, 0, 1), pos=(146, 305))
+        self.add_widget(self.textS)
+        self.add_widget(self.textM)
+        self.add_widget(self.textL)
 
     def update_sizes(self, s, m, l):
-        pass
+        self.textS.text = f"{s}"
+        self.textM.text = f"{m}"
+        self.textL.text = f"{l}"
 
-# Status Player y
+# Status Player O Black
 class StatusOLayout(FloatLayout):
     def __init__(self, **kwargs):
         super(StatusOLayout, self).__init__(**kwargs)
         self.size_hint = (None, None)
         self.pos_hint = {"center_x": 0.8, "center_y": 0.45}
-
         self.name = Label(text=f"Player O", font_size=40, color=(0, 0, 0, 1), pos_hint={"center_x": 1.2, "y": 0.6},)
-        # Label(
-        #     color=(1, 1, 1, 1),
-        #     text="Player O",
-        #     font_size=40,
-        #     size_hint=(None, None),
-        #     pos_hint={"center_x": 0.5, "y": 0},
-        # )
-        
-        # text = Label(text="total size", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 3.5})
-        
         self.add_widget(self.name)
-        # self.add_widget(text)
-        
+
         # Add circle 
         with self.canvas:
             Color(0, 0, 0)
