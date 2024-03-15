@@ -12,11 +12,68 @@ from kivy.utils import get_color_from_hex
 from kivy.uix.image import Image, AsyncImage
 from kivy.graphics import Color, Rectangle, Mesh
 from kivy.lang import Builder
+from kivy.uix.textinput import TextInput
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 
 # Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
 
+
+class StartScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.layout = FloatLayout()
+
+        # สร้างปุ่ม "Start"
+        start_button = Button(
+            text="Start",
+            size_hint=(None, None),
+            size=(250, 80),
+            pos_hint={"center_x": 0.5, "center_y": 0.7},
+        )
+        start_button.bind(on_press=self.on_start_button_press)
+
+        # เพิ่มปุ่ม "Start" เข้าไปในเลเอาท์
+        self.layout.add_widget(start_button)
+
+        # เพิ่มป้ายชื่อสำหรับผู้เล่น 1 และ 2
+        player1_label = Label(
+            text="Player 1",
+            size_hint=(None, None),
+            size=(100, 30),
+            pos_hint={"right": 0.2, "center_y": 0.9},
+        )
+        player2_label = Label(
+            text="Player 2",
+            size_hint=(None, None),
+            size=(100, 30),
+            pos_hint={"right": 0.9, "center_y": 0.9},
+        )
+        self.layout.add_widget(player1_label)
+        self.layout.add_widget(player2_label)
+
+        # เพิ่มช่องกรอกข้อความสำหรับผู้เล่น 1 และ 2
+        self.player1_input = TextInput(
+            multiline=False, size_hint=(None, None), size=(200, 30), pos_hint={'right': 0.25, 'center_y': 0.8}
+        )
+        self.player2_input = TextInput(
+            multiline=False, size_hint=(None, None), size=(200, 30), pos_hint={'right': 0.95, 'center_y': 0.8}
+        )
+        self.layout.add_widget(self.player1_input)
+        self.layout.add_widget(self.player2_input)
+
+        self.add_widget(self.layout)
+
+    def on_start_button_press(self, instance):
+        # ปิดหน้าจอ StartScreen ปัจจุบัน
+        player1_name = self.player1_input.text
+        player2_name = self.player2_input.text
+        print("Player 1:", player1_name)
+        print("Player 2:", player2_name)
+
+        app = App.get_running_app()
+        app.root.current = "game"
 # Class Character
 class Item(Label):
     def __init__(self, namee, **kwargs):
@@ -334,8 +391,10 @@ class BackgroundWidget(Widget):
         self.rect.size = instance.size
         
 # Run Game
-class TicTacToeApp(App):
-    def build(self):
+from kivy.uix.screenmanager import Screen
+
+class TicTacToeApp(Screen):
+    def on_enter(self):
         game = FloatLayout(size_hint=(1, 1))
         
         background = BackgroundWidget()
@@ -392,7 +451,15 @@ class TicTacToeApp(App):
         # Update status labels initially
         mapp.update_status_labels()
         
-        return game
+        self.add_widget(game)
 
+
+class MyApp(App):
+    def build(self):
+        # สร้าง ScreenManager เพื่อจัดการหน้าจอ
+        sm = ScreenManager()
+        sm.add_widget(StartScreen(name="start"))
+        sm.add_widget(TicTacToeApp(name="game"))
+        return sm
 if __name__ == "__main__":
-    TicTacToeApp().run()
+    MyApp().run()
