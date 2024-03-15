@@ -1,41 +1,31 @@
 from kivy.app import App
 from kivy.config import Config
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.clock import Clock
-from kivy.uix.floatlayout import FloatLayout
-from kivy.utils import get_color_from_hex
-from kivy.uix.image import Image, AsyncImage
-from kivy.graphics import Color, Rectangle, Mesh
 from kivy.lang import Builder
-from kivy.uix.textinput import TextInput
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.label import Label
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+from kivy.clock import Clock
+from kivy.graphics import Color, Rectangle, Ellipse
 from kivy.uix.widget import Widget
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.graphics.context_instructions import Color
+from kivy.uix.image import Image, AsyncImage
 
-Config.set("graphics", "fullscreen", "auto")
+# Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
 
-
-from kivy.uix.image import Image
-
-from kivy.graphics import Rectangle
-from kivy.graphics.context_instructions import Color
-
-
+# Start
 class StartScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.layout = FloatLayout()
 
-        # เพิ่มพื้นหลังเต็มหน้าจอโดยใช้ Rectangle
+        # Add bg full srceen with Rectangle
         with self.layout.canvas:
-            # กำหนดสีพื้นหลัง
-            Color(1, 1, 1, 1)  # เปลี่ยนสีตามที่ต้องการ
-            # สร้าง Rectangle ที่ครอบคลุมพื้นที่ขนาดเต็มหน้าจอ
+            Color(1, 1, 1, 1) 
             self.background = Rectangle(
                 source="images/BG6.png", size=self.size, pos=self.pos
             )
@@ -49,22 +39,20 @@ class StartScreen(Screen):
         )
         start_button.bind(on_press=self.on_start_button_press)
 
-        # เพิ่มปุ่ม "Start" เข้าไปในเลเอาท์
+        # Add "Start" button in layout
         self.layout.add_widget(start_button)
 
         self.add_widget(self.layout)
 
+    # close startscreen 
     def on_start_button_press(self, instance):
-        # ปิดหน้าจอ StartScreen ปัจจุบัน
         app = App.get_running_app()
         app.root.current = "game"
 
     def on_size(self, *args):
-        # อัปเดตขนาดของ Rectangle เมื่อขนาดของหน้าจอเปลี่ยนแปลง
         self.background.size = self.size
         self.background.pos = self.pos
-
-
+        
 # Class Character
 class Item(Label):
     def __init__(self, namee, **kwargs):
@@ -76,7 +64,6 @@ class Item(Label):
         self.m = 3
         self.l = 2  # Quantity of each size
 
-
 # Custom Button
 class CustomButton(Button):
     def __init__(self, **kwargs):
@@ -87,7 +74,6 @@ class CustomButton(Button):
 
     def addpoint(self, data):
         self.data = data
-
 
 # Game Main
 class TicTacToe(GridLayout):
@@ -186,24 +172,24 @@ class TicTacToe(GridLayout):
     def checkimg(self, button):
         if button.text == "x":
             if self.character.point == 1:
-                button.background_normal = "images/SX.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/SX.png"
+                button.background_down = "images/New/put.png"
             elif self.character.point == 2:
-                button.background_normal = "images/MX.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/MX.png"
+                button.background_down = "images/New/put.png"
             else:
-                button.background_normal = "images/LX.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/LX.png"
+                button.background_down = "images/New/put.png"
         else:
             if self.character.point == 1:
-                button.background_normal = "images/SO.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/SO.png"
+                button.background_down = "images/New/put.png"
             elif self.character.point == 2:
-                button.background_normal = "images/MO.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/MO.png"
+                button.background_down = "images/New/put.png"
             else:
-                button.background_normal = "images/LO.png"
-                button.background_down = "images/put.png"
+                button.background_normal = "images/New/LO.png"
+                button.background_down = "images/New/put.png"
 
     # Check size character s m l
     def checksize(self):
@@ -318,79 +304,63 @@ class TicTacToe(GridLayout):
         elif self.X.l > 0:
             self.character.point = 3
 
-
-# Status Player X
+# Status Player X White
 class StatusXLayout(FloatLayout):
     def __init__(self, **kwargs):
         super(StatusXLayout, self).__init__(**kwargs)
         self.size_hint = (None, None)
         self.pos_hint = {"center_x": 0.2, "center_y": 0.45}
-
-        self.nameX = Label(
-            text="Player X",
-            font_size=40,
-            size_hint=(None, None),
-            pos_hint={"center_x": 0.5, "y": 4.5},
-        )
-
+        self.nameX = Label(text=f"Player X", font_size=40, color=(1, 1, 1, 1), pos_hint={"center_x": 0.001, "y": 0.6},)
         self.add_widget(self.nameX)
-
-    def update_sizes(self, s, m, l):
-        pass
-
-
-# Status Player y
-class StatusOLayout(FloatLayout):
-    def __init__(self, **kwargs):
-        super(StatusOLayout, self).__init__(**kwargs)
-        self.size_hint = (None, None)
-        self.pos_hint = {"center_x": 0.8, "center_y": 0.45}
-
-        self.name = Label(
-            text="Player O",
-            font_size=40,
-            size_hint=(None, None),
-            pos_hint={"center_x": 0.5, "y": 4.5},
-        )
-
-        text = Label(
-            text="total size",
-            font_size=40,
-            color=(0, 0, 0),
-            pos_hint={"center_x": 0.8, "y": 3.5},
-        )
-
-        self.add_widget(self.name)
-        self.add_widget(text)
-
-        self.textS = Label(
-            text=f"size S = 0",
-            font_size=40,
-            color=(0, 0, 0),
-            pos_hint={"center_x": 0.8, "y": 2.5},
-        )
-        self.textM = Label(
-            text=f"size M = 0",
-            font_size=40,
-            color=(0, 0, 0),
-            pos_hint={"center_x": 0.8, "y": 2},
-        )
-        self.textL = Label(
-            text=f"size L = 0",
-            font_size=40,
-            color=(0, 0, 0),
-            pos_hint={"center_x": 0.8, "y": 1.5},
-        )
+    
+        # Add circle 
+        with self.canvas:
+            Color(1, 1, 1, 1)
+            self.circle1 = Ellipse(pos=(170, 330), size=(50, 50))
+            self.circle2 = Ellipse(pos=(330, 330), size=(50, 50))
+            self.circle3 = Ellipse(pos=(490, 335), size=(50, 50))
+        
+        self.textS = Label(text=f"0", font_size=30, color=(0, 0, 0, 1), pos=(466, 306))
+        self.textM = Label(text=f"0", font_size=30, color=(0, 0, 0, 1), pos=(306, 306))
+        self.textL = Label(text=f"0", font_size=30, color=(0, 0, 0, 1), pos=(146, 305))
         self.add_widget(self.textS)
         self.add_widget(self.textM)
         self.add_widget(self.textL)
 
     def update_sizes(self, s, m, l):
-        self.textS.text = f"size S = {s}"
-        self.textM.text = f"size M = {m}"
-        self.textL.text = f"size L = {l}"
+        self.textS.text = f"{s}"
+        self.textM.text = f"{m}"
+        self.textL.text = f"{l}"
 
+# Status Player O Black
+class StatusOLayout(FloatLayout):
+    def __init__(self, **kwargs):
+        super(StatusOLayout, self).__init__(**kwargs)
+        self.size_hint = (None, None)
+        self.pos_hint = {"center_x": 0.8, "center_y": 0.45}
+        self.name = Label(text=f"Player O", font_size=40, color=(0, 0, 0, 1), pos_hint={"center_x": 1.2, "y": 0.6},)
+        self.add_widget(self.name)
 
+        # Add circle 
+        with self.canvas:
+            Color(0, 0, 0)
+            self.circle1 = Ellipse(pos=(1470, 330), size=(50, 50))
+            self.circle2 = Ellipse(pos=(1640, 330), size=(50, 50))
+            self.circle3 = Ellipse(pos=(1780, 335), size=(50, 50))
+        
+        self.textS = Label(text=f"0", font_size=30, color=(1, 1, 1, 1), pos=(1756, 308))
+        self.textM = Label(text=f"0", font_size=30, color=(1, 1, 1, 1), pos=(1616, 305))
+        self.textL = Label(text=f"0", font_size=30, color=(1, 1, 1, 1), pos=(1446, 305))
+        self.add_widget(self.textS)
+        self.add_widget(self.textM)
+        self.add_widget(self.textL)
+
+    def update_sizes(self, s, m, l):
+        self.textS.text = f"{s}"
+        self.textM.text = f"{m}"
+        self.textL.text = f"{l}"
+
+# Bg Game main
 class BackgroundWidget(Widget):
     def __init__(self, **kwargs):
         super(BackgroundWidget, self).__init__(**kwargs)
@@ -406,23 +376,13 @@ class BackgroundWidget(Widget):
         self.rect.pos = instance.pos
         self.rect.size = instance.size
 
-
 # Run Game
-from kivy.uix.screenmanager import Screen
-
-
 class TicTacToeApp(Screen):
     def on_enter(self):
         game = FloatLayout(size_hint=(1, 1))
 
         background = BackgroundWidget()
         game.add_widget(background)
-
-        # title = Label(
-        #     text="Tic tac toc",
-        #     font_size=40,
-        #     pos_hint={"center_x": 0.5, "center_y": 0.9},
-        # )
 
         mapp = TicTacToe(
             size_hint=(None, None),
@@ -471,7 +431,7 @@ class TicTacToeApp(Screen):
 
         self.add_widget(game)
 
-
+# First page game
 class MyApp(App):
     def build(self):
         # สร้าง ScreenManager เพื่อจัดการหน้าจอ
@@ -479,7 +439,6 @@ class MyApp(App):
         sm.add_widget(StartScreen(name="start"))
         sm.add_widget(TicTacToeApp(name="game"))
         return sm
-
 
 if __name__ == "__main__":
     MyApp().run()
