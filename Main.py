@@ -37,15 +37,14 @@ class StartScreen(Screen):
             Color(1, 1, 1, 1)  # เปลี่ยนสีตามที่ต้องการ
             # สร้าง Rectangle ที่ครอบคลุมพื้นที่ขนาดเต็มหน้าจอ
             self.background = Rectangle(
-                source="images/BG5.png", size=self.size, pos=self.pos
+                source="images/BG6.png", size=self.size, pos=self.pos
             )
 
         # สร้างปุ่ม "Start"
         start_button = Button(
-            
             size_hint=(None, None),
-            size=(500, 150),
-            pos_hint={"center_x": 0.5, "center_y": 0.5},
+            size=(250, 60),
+            pos_hint={"center_x": 0.5, "center_y": 0.28},
             background_normal="images/startbutton.png",  # Set background image
         )
         start_button.bind(on_press=self.on_start_button_press)
@@ -280,7 +279,7 @@ class TicTacToe(GridLayout):
     # Popup if you win
     def show_popup(self, text):
         popup = Popup(
-            # title="Game Over",
+            title="Finish Game ",
             content=BoxLayout(orientation="vertical"),
             size_hint=(None, None),
             size=(400, 200),
