@@ -16,14 +16,26 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 
-# Config.set("graphics", "fullscreen", "auto")
+Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
 
+
+from kivy.uix.image import Image
+
+from kivy.graphics import Rectangle
+from kivy.graphics.context_instructions import Color
 
 class StartScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.layout = FloatLayout()
+
+        # เพิ่มพื้นหลังเต็มหน้าจอโดยใช้ Rectangle
+        with self.layout.canvas:
+            # กำหนดสีพื้นหลัง
+            Color(1, 1, 1, 1)  # เปลี่ยนสีตามที่ต้องการ
+            # สร้าง Rectangle ที่ครอบคลุมพื้นที่ขนาดเต็มหน้าจอ
+            self.background = Rectangle(source='images/BG5.png',size=self.size, pos=self.pos)
 
         # สร้างปุ่ม "Start"
         start_button = Button(
@@ -41,7 +53,6 @@ class StartScreen(Screen):
        
 
         # เพิ่มช่องกรอกข้อความสำหรับผู้เล่น 1 และ 2
-        
 
         self.add_widget(self.layout)
 
@@ -49,6 +60,13 @@ class StartScreen(Screen):
         # ปิดหน้าจอ StartScreen ปัจจุบัน
         app = App.get_running_app()
         app.root.current = "game"
+
+    def on_size(self, *args):
+        # อัปเดตขนาดของ Rectangle เมื่อขนาดของหน้าจอเปลี่ยนแปลง
+        self.background.size = self.size
+        self.background.pos = self.pos
+
+
 # Class Character
 class Item(Label):
     def __init__(self, namee, **kwargs):
@@ -436,5 +454,6 @@ class MyApp(App):
         sm.add_widget(StartScreen(name="start"))
         sm.add_widget(TicTacToeApp(name="game"))
         return sm
+    
 if __name__ == "__main__":
     MyApp().run()
