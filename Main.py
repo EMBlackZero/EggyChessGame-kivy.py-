@@ -10,7 +10,7 @@ from kivy.clock import Clock
 from kivy.uix.floatlayout import FloatLayout
 from kivy.utils import get_color_from_hex
 from kivy.uix.image import Image, AsyncImage
-from kivy.graphics import Color, Rectangle, Mesh
+from kivy.graphics import Color, Rectangle, Ellipse
 from kivy.lang import Builder
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -19,13 +19,13 @@ from kivy.uix.widget import Widget
 # Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
 
-
+# Start Screen Page (Before Main)
 class StartScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.layout = FloatLayout()
 
-        # สร้างปุ่ม "Start"
+        # create start button
         start_button = Button(
             text="Start",
             size_hint=(None, None),
@@ -34,10 +34,10 @@ class StartScreen(Screen):
         )
         start_button.bind(on_press=self.on_start_button_press)
 
-        # เพิ่มปุ่ม "Start" เข้าไปในเลเอาท์
+        # Add "Start" button in layout
         self.layout.add_widget(start_button)
 
-        # เพิ่มป้ายชื่อสำหรับผู้เล่น 1 และ 2
+        # Add name tag for player 1 and 2
         player1_label = Label(
             text="Player 1",
             size_hint=(None, None),
@@ -53,7 +53,7 @@ class StartScreen(Screen):
         self.layout.add_widget(player1_label)
         self.layout.add_widget(player2_label)
 
-        # เพิ่มช่องกรอกข้อความสำหรับผู้เล่น 1 และ 2
+        # Add Input name for player 1 and 2
         self.player1_input = TextInput(
             multiline=False, size_hint=(None, None), size=(200, 30), pos_hint={'right': 0.25, 'center_y': 0.8}
         )
@@ -66,7 +66,7 @@ class StartScreen(Screen):
         self.add_widget(self.layout)
 
     def on_start_button_press(self, instance):
-        # ปิดหน้าจอ StartScreen ปัจจุบัน
+        # Close StartScreen
         player1_name = self.player1_input.text
         player2_name = self.player2_input.text
         print("Player 1:", player1_name)
@@ -74,6 +74,7 @@ class StartScreen(Screen):
 
         app = App.get_running_app()
         app.root.current = "game"
+        
 # Class Character
 class Item(Label):
     def __init__(self, namee, **kwargs):
@@ -351,29 +352,38 @@ class StatusOLayout(FloatLayout):
         self.size_hint = (None, None)
         self.pos_hint = {"center_x": 0.8, "center_y": 0.45}
 
-        self.name = Label(
-            text="Player O",
-            font_size=40,
-            size_hint=(None, None),
-            pos_hint={"center_x": 0.5, "y": 4.5},
-        )
+        self.name = Label(text=f"Player O", font_size=40, color=(0, 0, 0, 1), pos_hint={"center_x": 1.2, "y": 0.6},)
+        # Label(
+        #     color=(1, 1, 1, 1),
+        #     text="Player O",
+        #     font_size=40,
+        #     size_hint=(None, None),
+        #     pos_hint={"center_x": 0.5, "y": 0},
+        # )
         
-        text = Label(text="total size", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 3.5})
+        # text = Label(text="total size", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 3.5})
         
         self.add_widget(self.name)
-        self.add_widget(text)
+        # self.add_widget(text)
         
-        self.textS = Label(text=f"size S = 0", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 2.5})
-        self.textM = Label(text=f"size M = 0", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 2})
-        self.textL = Label(text=f"size L = 0", font_size=40, color=(0, 0, 0), pos_hint={"center_x": 0.8, "y": 1.5})
+        # Add circle 
+        with self.canvas:
+            Color(0, 0, 0)
+            self.circle1 = Ellipse(pos=(1470, 330), size=(50, 50))
+            self.circle2 = Ellipse(pos=(1640, 330), size=(50, 50))
+            self.circle3 = Ellipse(pos=(1780, 335), size=(50, 50))
+        
+        self.textS = Label(text=f"0", font_size=30, color=(1, 1, 1, 1), pos=(1756, 308))
+        self.textM = Label(text=f"0", font_size=30, color=(1, 1, 1, 1), pos=(1616, 305))
+        self.textL = Label(text=f"0", font_size=30, color=(1, 1, 1, 1), pos=(1446, 305))
         self.add_widget(self.textS)
         self.add_widget(self.textM)
         self.add_widget(self.textL)
 
     def update_sizes(self, s, m, l):
-        self.textS.text = f"size S = {s}"
-        self.textM.text = f"size M = {m}"
-        self.textL.text = f"size L = {l}"
+        self.textS.text = f"{s}"
+        self.textM.text = f"{m}"
+        self.textL.text = f"{l}"
     
 class BackgroundWidget(Widget):
     def __init__(self, **kwargs):
