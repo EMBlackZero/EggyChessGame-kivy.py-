@@ -19,6 +19,9 @@ from kivy.core.audio import SoundLoader
 # Config.set("graphics", "fullscreen", "auto")
 Builder.load_file("PlayerXLayout.kv")
 
+# X = White
+# O = Black
+
 # Start
 class StartScreen(Screen):
     def __init__(self, **kwargs):
@@ -82,6 +85,17 @@ class CustomButton(Button):
     def addpoint(self, data):
         self.data = data
 
+# Custom Button size
+class CustomButtonSize(Button):
+    def __init__(self, size, **kwargs):
+        super().__init__(**kwargs)
+        if size == "s":
+            self.background_normal = "images/iconS.png"
+        elif size == "m":
+            self.background_normal = "images/iconM.png"
+        elif size == "l":
+            self.background_normal = "images/iconL.png"
+            
 # Game Main
 class TicTacToe(GridLayout):
     def __init__(self, **kwargs):
@@ -121,7 +135,6 @@ class TicTacToe(GridLayout):
             self.character.point = 2
         elif button == "L" and self.character.l > 0:
             self.character.point = 3
-
         else:
             self.show_popup("button size emty")
 
@@ -409,17 +422,17 @@ class TicTacToeApp(Screen):
         )
 
         turn = Label(font_size=40, pos_hint={"center_x": 0.5, "center_y": 0.2})
-
         mapp.turn_label = turn
 
         sett = BoxLayout(
             size_hint=(None, None),
-            size=(500, 100),
+            size=(870, 290),
             pos_hint={"center_x": 0.5, "center_y": 0.1},
         )
-        S = Button(text="S", on_press=lambda instance: mapp.changepoint("S"))
-        M = Button(text="M", on_press=lambda instance: mapp.changepoint("M"))
-        L = Button(text="L", on_press=lambda instance: mapp.changepoint("L"))
+        
+        S = CustomButtonSize("s", on_press=lambda instance: mapp.changepoint("S"))
+        M = CustomButtonSize("m", on_press=lambda instance: mapp.changepoint("M"))
+        L = CustomButtonSize("l", on_press=lambda instance: mapp.changepoint("L"))
 
         # Create StatusXLayout
         status_x_layout = StatusXLayout()
@@ -429,16 +442,14 @@ class TicTacToeApp(Screen):
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         # Add widget
         # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        sett.add_widget(S)
-        sett.add_widget(M)
         sett.add_widget(L)
-        # game.add_widget(title)  # Game name
+        sett.add_widget(M)
+        sett.add_widget(S)
         game.add_widget(mapp)  # Game
         game.add_widget(turn)  # Your Turn
         game.add_widget(sett)  # chang size
         game.add_widget(status_x_layout)  # Status player X
         game.add_widget(status_o_layout)  # Status player O
-        # return TicTacToe()
 
         # Store references to status layouts in TicTacToe instance
         mapp.status_x_layout = status_x_layout
