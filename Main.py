@@ -51,6 +51,8 @@ class StartScreen(Screen):
         instance.background_down = "images/startbutton.png"
         app = App.get_running_app()
         app.root.current = "game"
+        win_sound = SoundLoader.load('images/New/Teleport.mp3')
+        win_sound.play()
 
     def on_size(self, *args):
         self.background.size = self.size
@@ -195,6 +197,8 @@ class TicTacToe(GridLayout):
             else:
                 button.background_normal = "images/New/LO.png"
                 button.background_down = "images/New/put.png"
+        win_sound = SoundLoader.load('images/New/Teleport.mp3')
+        win_sound.play()
 
     # Check size character s m l
     def checksize(self):
