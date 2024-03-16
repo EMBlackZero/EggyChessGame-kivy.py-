@@ -433,10 +433,10 @@ class TicTacToeApp(Screen):
             pos_hint={"center_x": 0.5, "center_y": 0.5},
         )
 
-        turn = Label(font_size=40, pos_hint={"center_x": 0.5, "center_y": 0.2})
+        turn = Label(font_size=40, pos_hint={"center_x": 0.5, "center_y": 0.8})
         mapp.turn_label = turn
         
-        time = Label(font_size=40, pos_hint={'center_x': 0.5, 'center_y': 0.84}, color=(0, 0, 0, 1))
+        time = Label(font_size=40, pos_hint={'center_x': 0.5, 'center_y': 0.89}, color=(0, 0, 0, 1))
         mapp.timelimit_label = time
 
         sett = BoxLayout(
