@@ -54,13 +54,13 @@ class StartScreen(Screen):
         instance.background_down = "images/startbutton.png"
         app = App.get_running_app()
         app.root.current = "game"
-        win_sound = SoundLoader.load('images/New/Teleport.mp3')
+        win_sound = SoundLoader.load('images/Sound/Teleport.mp3')
         win_sound.play()
 
     def on_size(self, *args):
         self.background.size = self.size
         self.background.pos = self.pos
-    win_sound = SoundLoader.load('images/New/backgroundmusic.mp3')
+    win_sound = SoundLoader.load('images/Sound/backgroundmusic.mp3')
     win_sound.play()
         
 # Class Character
@@ -117,7 +117,10 @@ class TicTacToe(GridLayout):
         ############################
 
         self.turn_label = None
+        self.timelimit_label = None
+        self.timelimit = 10
         Clock.schedule_interval(self.update_turn_label, 0.1)
+        Clock.schedule_interval(self.timer, 1)
         for _ in range(3):
             row = []
             for _ in range(3):
@@ -154,10 +157,8 @@ class TicTacToe(GridLayout):
                 if self.check_winner():
                     self.show_popup(f"{self.character.name} wins!")
                 else:
-                    if self.character == self.X:
-                        self.character = self.O
-                    else:
-                        self.character = self.X
+                    self.character = self.O if self.character == self.X else self.X
+                    self.timelimit = 10
             else:
                 # Automatically change the point (assuming it's related to grid size)
                 self.autochangepoint()
@@ -168,10 +169,8 @@ class TicTacToe(GridLayout):
                 if self.check_winner():
                     self.show_popup(f"{self.character.name} wins!")
                 else:
-                    if self.character == self.X:
-                        self.character = self.O
-                    else:
-                        self.character = self.X
+                    self.character = self.O if self.character == self.X else self.X
+                    self.timelimit = 10
         # Button != empty
         elif (
             instance.text != ""
@@ -186,10 +185,8 @@ class TicTacToe(GridLayout):
                 if self.check_winner():
                     self.show_popup(f"{self.character.name} wins!")
                 else:
-                    if self.character == self.X:
-                        self.character = self.O
-                    else:
-                        self.character = self.X
+                    self.character = self.O if self.character == self.X else self.X
+                    self.timelimit = 10
 
     # Add img in field
     def checkimg(self, button):
@@ -213,7 +210,7 @@ class TicTacToe(GridLayout):
             else:
                 button.background_normal = "images/New/LO.png"
                 button.background_down = "images/New/put.png"
-        win_sound = SoundLoader.load('images/New/Teleport.mp3')
+        win_sound = SoundLoader.load('images/Sound/Teleport.mp3')
         win_sound.play()
 
     # Check size character s m l
@@ -229,6 +226,7 @@ class TicTacToe(GridLayout):
                 return True
         return False
 
+    # Update status size player
     def update_status_labels(self):
         # Update StatusXLayout
         self.status_x_layout.update_sizes(self.X.s, self.X.m, self.X.l)
@@ -306,15 +304,26 @@ class TicTacToe(GridLayout):
         )
         
         if self.character.name == "x" and text!='button size emty':
-            win_sound = SoundLoader.load('images/New/winX.mp3')
+            win_sound = SoundLoader.load('images/Sound/winX.mp3')
             win_sound.play()
         elif self.character.name == "O"and text!='button size emty':
-            win_sound = SoundLoader.load('images/New/winO.mp3')
+            win_sound = SoundLoader.load('images/Sound/winO.mp3')
             win_sound.play()
         elif  text =='button size emty':
-            win_sound = SoundLoader.load('images/New/buttonsizeemty.mp3')
+            win_sound = SoundLoader.load('images/Sound/buttonsizeemty.mp3')
             win_sound.play()
         popup.open()
+        
+    # Timer Turn
+    def timer(self, dt):
+        if self.timelimit == 0:
+            self.character = self.O if self.character == self.X else self.X
+            self.timelimit = 10
+        else:
+            self.timelimit -= 1
+        
+        self.timelimit_label.text = f"{self.timelimit}"
+            
     # Update Yourturn
     def update_turn_label(self, dt):
         if self.turn_label and self.character:
@@ -426,6 +435,9 @@ class TicTacToeApp(Screen):
 
         turn = Label(font_size=40, pos_hint={"center_x": 0.5, "center_y": 0.2})
         mapp.turn_label = turn
+        
+        time = Label(font_size=40, pos_hint={'center_x': 0.5, 'center_y': 0.84}, color=(0, 0, 0, 1))
+        mapp.timelimit_label = time
 
         sett = BoxLayout(
             size_hint=(None, None),
@@ -450,6 +462,7 @@ class TicTacToeApp(Screen):
         sett.add_widget(S)
         game.add_widget(mapp)  # Game
         game.add_widget(turn)  # Your Turn
+        game.add_widget(time)  # Time
         game.add_widget(sett)  # chang size
         game.add_widget(status_x_layout)  # Status player X
         game.add_widget(status_o_layout)  # Status player O
