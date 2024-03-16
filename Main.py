@@ -89,10 +89,13 @@ class CustomButtonSize(Button):
         super().__init__(**kwargs)
         if size == "s":
             self.background_normal = "images/iconS.png"
+            self.background_down = "images/iconS.png"
         elif size == "m":
             self.background_normal = "images/iconM.png"
+            self.background_down = "images/iconM.png"
         elif size == "l":
             self.background_normal = "images/iconL.png"
+            self.background_down = "images/iconL.png"
             
 # Game Main
 class TicTacToe(GridLayout):
