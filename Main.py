@@ -119,7 +119,7 @@ class CustomChallengeButton(Button):
         self.background_down = "images/challenge.png"
         self.size_hint = (None, None)
         self.size = image_size
-        self.pos_hint = {"right": 0.945, "top": 0.98}
+        self.pos_hint = {"right": 0.94, "top": 0.98} #right": 0.945
                    
 # Game Main
 class TicTacToe(GridLayout):
