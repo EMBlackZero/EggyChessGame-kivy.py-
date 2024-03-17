@@ -70,16 +70,18 @@ class Item(Label):
         self.name = namee
         self.font_size = 10
         self.point = 1
-        self.s = 3
-        self.m = 3
-        self.l = 2  # Quantity of each size
+        # Quantity of each size
+        self.s = 3  # 1 point
+        self.m = 3  # 2 point
+        self.l = 2  # 3 point
+        self.total = 15
 
 # Custom Button
 class CustomButton(Button):
-    def __init__(self, **kwargs):
+    def __init__(self, img, **kwargs):
         super().__init__(**kwargs)
         self.data = None
-        self.background_normal = "images/Board4.png"
+        self.background_normal = img
         self.color = (0, 0, 0, 0)
 
     def addpoint(self, data):
@@ -98,7 +100,16 @@ class CustomButtonSize(Button):
         elif size == "l":
             self.background_normal = "images/iconL.png"
             self.background_down = "images/iconL.png"
-            
+     
+class CustomResetButton(Button):
+    def __init__(self, image_size=(110, 110), **kwargs):
+        super().__init__(**kwargs)
+        self.background_normal = "images/reset.png"
+        self.background_down = "images/reset.png"
+        self.size_hint = (None, None)
+        self.size = image_size
+        self.pos_hint = {"right": 0.99, "top": 0.98}
+               
 # Game Main
 class TicTacToe(GridLayout):
     def __init__(self, **kwargs):
@@ -108,13 +119,13 @@ class TicTacToe(GridLayout):
         self.X = Item("x")
         self.O = Item("O")
 
-        ############################
-        #                          #
-        #    [but1, but2, but3]    #
-        #    [but4, but5, but6]    #
-        #    [but7, but8, but9]    #
-        #                          #
-        ############################
+        #############################
+        #                           #
+        #    [but1, but2, but3],    #
+        #    [but4, but5, but6],    #
+        #    [but7, but8, but9],    #
+        #                           #
+        #############################
 
         self.turn_label = None
         self.timelimit_label = None
@@ -124,10 +135,11 @@ class TicTacToe(GridLayout):
         for _ in range(3):
             row = []
             for _ in range(3):
-                button = CustomButton(on_press=self.on_button_press)
+                button = CustomButton("images/Board4.png" ,on_press=self.on_button_press)
                 row.append(button)
                 self.add_widget(button)
             self.buttons.append(row)
+        # print(str(self.buttons
 
         self.character = self.X  # Turn Player
         self.winner = None
@@ -238,10 +250,13 @@ class TicTacToe(GridLayout):
         print(self.character.name)
         if self.character.point == 1:
             self.character.s -= 1
+            self.character.total -= 1
         elif self.character.point == 2:
             self.character.m -= 1
+            self.character.total -= 2
         elif self.character.point == 3:
             self.character.l -= 1
+            self.character.total -= 3
 
         print("s", self.character.s)
         print("m", self.character.m)
@@ -302,17 +317,52 @@ class TicTacToe(GridLayout):
                 on_press=popup.dismiss,
             )
         )
-        
-        if self.character.name == "x" and text!='button size emty':
+        if popup != popup.dismiss and text != "button size emty":
+           self.reset_game()
+        if self.character.name == "x" and text !='button size emty':
             win_sound = SoundLoader.load('images/Sound/winX.mp3')
             win_sound.play()
-        elif self.character.name == "O"and text!='button size emty':
+        elif self.character.name == "O"and text !='button size emty':
             win_sound = SoundLoader.load('images/Sound/winO.mp3')
             win_sound.play()
         elif  text =='button size emty':
             win_sound = SoundLoader.load('images/Sound/buttonsizeemty.mp3')
             win_sound.play()
         popup.open()
+    
+    # Restart game
+    def reset_game(self):
+        # Clear the text and point data of all buttons
+        for row in self.buttons:
+            for button in row:
+                button.text = ""
+                button.data = None
+                button.background_normal = "images/Board4.png"
+
+        # Reset player X and O data
+        self.X.s = 3
+        self.X.m = 3
+        self.X.l = 2
+        self.X.total = 15
+        self.O.s = 3
+        self.O.m = 3
+        self.O.l = 2
+        self.O.total = 15
+        self.timelimit = 10
+       
+        # Reset the turn to player X
+        self.character = self.X
+        self.character.point = 1
+        # Update status labels
+        self.update_status_labels()
+
+        # Reset winner status
+        self.winner = None
+
+        # Close any open popups
+        for child in self.parent.children:
+            if isinstance(child, Popup):
+                child.dismiss()
         
     # Timer Turn
     def timer(self, dt):
@@ -453,6 +503,10 @@ class TicTacToeApp(Screen):
         status_x_layout = StatusXLayout()
         # Create StatusOLayout
         status_o_layout = StatusOLayout()
+
+        reset_button = CustomResetButton()
+        reset_button.bind(on_press=lambda instance: mapp.reset_game())
+        game.add_widget(reset_button)
 
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         # Add widget
