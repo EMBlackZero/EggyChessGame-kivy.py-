@@ -74,7 +74,7 @@ class Item(Label):
         self.s = 3  # 1 point
         self.m = 3  # 2 point
         self.l = 2  # 3 point
-        self.total = 15
+        self.total = 0
 
 # Custom Button
 class CustomButton(Button):
@@ -100,7 +100,8 @@ class CustomButtonSize(Button):
         elif size == "l":
             self.background_normal = "images/iconL.png"
             self.background_down = "images/iconL.png"
-     
+    
+# Custom Button Reset 
 class CustomResetButton(Button):
     def __init__(self, image_size=(110, 110), **kwargs):
         super().__init__(**kwargs)
@@ -109,7 +110,17 @@ class CustomResetButton(Button):
         self.size_hint = (None, None)
         self.size = image_size
         self.pos_hint = {"right": 0.99, "top": 0.98}
-               
+
+# Custom Challenge Reset 
+class CustomChallengeButton(Button):
+    def __init__(self, image_size=(110, 110), **kwargs):
+        super().__init__(**kwargs)
+        self.background_normal = "images/challenge.png"
+        self.background_down = "images/challenge.png"
+        self.size_hint = (None, None)
+        self.size = image_size
+        self.pos_hint = {"right": 0.945, "top": 0.98}
+                   
 # Game Main
 class TicTacToe(GridLayout):
     def __init__(self, **kwargs):
@@ -163,6 +174,7 @@ class TicTacToe(GridLayout):
             if self.checksize():
                 self.delet()
                 instance.text = self.character.name
+                # print(self.character.name)
                 instance.addpoint(self.character.point)
                 self.checkimg(instance)
                 # Check winner
@@ -330,6 +342,19 @@ class TicTacToe(GridLayout):
             win_sound.play()
         popup.open()
     
+    # If you cann't play (Draw)
+    def draw_game(self):
+        for row in self.buttons:
+            for i in range (0,3):
+                if row[i].text == "x":
+                    self.X.total += row[i].data
+                else:
+                    self.O.total += row[i].data
+        if self.X.total > self.O.total:
+            self.show_popup(f"{self.X.name} wins!")
+        else:
+            self.show_popup(f"{self.O.name} wins!")
+    
     # Restart game
     def reset_game(self):
         # Clear the text and point data of all buttons
@@ -343,11 +368,11 @@ class TicTacToe(GridLayout):
         self.X.s = 3
         self.X.m = 3
         self.X.l = 2
-        self.X.total = 15
+        self.X.total = 0
         self.O.s = 3
         self.O.m = 3
         self.O.l = 2
-        self.O.total = 15
+        self.O.total = 0
         self.timelimit = 10
        
         # Reset the turn to player X
@@ -507,6 +532,10 @@ class TicTacToeApp(Screen):
         reset_button = CustomResetButton()
         reset_button.bind(on_press=lambda instance: mapp.reset_game())
         game.add_widget(reset_button)
+        
+        challenge_button = CustomChallengeButton()
+        challenge_button.bind(on_press=lambda instance: mapp.draw_game())
+        game.add_widget(challenge_button)
 
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         # Add widget
