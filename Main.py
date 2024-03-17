@@ -262,13 +262,10 @@ class TicTacToe(GridLayout):
         print(self.character.name)
         if self.character.point == 1:
             self.character.s -= 1
-            self.character.total -= 1
         elif self.character.point == 2:
             self.character.m -= 1
-            self.character.total -= 2
         elif self.character.point == 3:
             self.character.l -= 1
-            self.character.total -= 3
 
         print("s", self.character.s)
         print("m", self.character.m)
@@ -348,12 +345,13 @@ class TicTacToe(GridLayout):
             for i in range (0,3):
                 if row[i].text == "x":
                     self.X.total += row[i].data
-                else:
+                elif row[i].text == "O":
                     self.O.total += row[i].data
         if self.X.total > self.O.total:
-            self.show_popup(f"{self.X.name} wins!")
+            print(str(f"{self.X.total} {self.O.total}"))
+            self.show_popup(f"x wins!")
         else:
-            self.show_popup(f"{self.O.name} wins!")
+            self.show_popup(f"o wins!")
     
     # Restart game
     def reset_game(self):
