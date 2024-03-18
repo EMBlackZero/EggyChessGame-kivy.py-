@@ -119,7 +119,7 @@ class CustomChallengeButton(Button):
         self.background_down = "images/challenge.png"
         self.size_hint = (None, None)
         self.size = image_size
-        self.pos_hint = {"right": 0.945, "top": 0.98}
+        self.pos_hint = {"right": 0.94, "top": 0.98} #right": 0.945
                    
 # Game Main
 class TicTacToe(GridLayout):
@@ -311,6 +311,7 @@ class TicTacToe(GridLayout):
 
     # Popup if you win
     def show_popup(self, text):
+        print(text)
         popup = Popup(
             title="Finish Game ",
             content=BoxLayout(orientation="vertical"),
@@ -328,10 +329,10 @@ class TicTacToe(GridLayout):
         )
         if popup != popup.dismiss and text != "button size emty":
            self.reset_game()
-        if self.character.name == "x" and text !='button size emty':
+        if text == "x wins!" and text !='button size emty':
             win_sound = SoundLoader.load('images/Sound/winX.mp3')
             win_sound.play()
-        elif self.character.name == "O"and text !='button size emty':
+        elif text == "O wins!"and text !='button size emty':
             win_sound = SoundLoader.load('images/Sound/winO.mp3')
             win_sound.play()
         elif  text =='button size emty':
@@ -350,8 +351,10 @@ class TicTacToe(GridLayout):
         if self.X.total > self.O.total:
             print(str(f"{self.X.total} {self.O.total}"))
             self.show_popup(f"x wins!")
-        else:
+        elif self.X.total < self.O.total :
             self.show_popup(f"o wins!")
+        elif self.X.total == self.O.total :
+             self.show_popup(f"draw")
     
     # Restart game
     def reset_game(self):
