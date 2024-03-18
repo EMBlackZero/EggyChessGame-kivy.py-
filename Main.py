@@ -352,7 +352,7 @@ class TicTacToe(GridLayout):
             print(str(f"{self.X.total} {self.O.total}"))
             self.show_popup(f"x wins!")
         elif self.X.total < self.O.total :
-            self.show_popup(f"o wins!")
+            self.show_popup(f"O wins!")
         elif self.X.total == self.O.total :
              self.show_popup(f"draw")
     
